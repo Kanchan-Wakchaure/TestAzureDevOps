@@ -1,0 +1,21 @@
+name: Test
+
+on:
+  push:
+    branches: feat/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set app settings for the web app
+      id: var
+      run: |
+        chmod +x ./appsettings.json
+        app_var=$(jq .JAVA_OPTS appsettings.json)
+        echo ${app_var}
+        app_name $(jq -r 'keys[]' appsettings.json)
+        echo "::set-output name=APPSET::${app_var}"
